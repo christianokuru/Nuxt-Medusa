@@ -33,7 +33,7 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
 ])
 
 const navUi = {
-  link: "text-[13px] py-1.5 text-toned data-[disabled]:opacity-40 data-[disabled]:cursor-default",
+  link: "text-base sm:text-[13px] py-2.5 sm:py-1.5 text-toned data-[disabled]:opacity-40 data-[disabled]:cursor-default",
   linkLeadingIcon: "size-4",
 }
 </script>
@@ -45,13 +45,13 @@ const navUi = {
       :default-size="15"
       :ui="{
         root: 'bg-muted/50 border-r border-default',
-        header: 'h-auto px-5 pt-6 pb-4',
+        header: 'h-auto px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-4',
         body: 'px-3 gap-6',
-        footer: 'px-3 py-3 border-t border-default',
+        footer: 'px-3 py-3 border-t border-default pb-[max(0.75rem,env(safe-area-inset-bottom))]',
       }"
     >
       <template #header="{ collapsed }">
-        <NuxtLink to="/" class="flex items-center gap-3 min-w-0">
+        <NuxtLink to="/" class="flex items-center gap-3 min-w-0 min-h-11">
           <span class="size-8 shrink-0 rounded-full bg-inverted text-inverted grid place-items-center font-display text-lg leading-none">
             {{ storeName?.charAt(0) }}
           </span>

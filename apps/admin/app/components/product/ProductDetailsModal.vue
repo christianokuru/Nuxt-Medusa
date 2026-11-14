@@ -56,16 +56,8 @@ async function submit() {
     <UFormField label="Description" hint="Optional">
       <UTextarea v-model="form.description" :rows="6" autoresize class="w-full" />
     </UFormField>
-    <div class="flex items-start justify-between gap-6 pt-5 border-t border-default">
-      <div>
-        <p class="text-sm font-medium text-highlighted">
-          Discountable
-        </p>
-        <p class="text-sm text-muted mt-0.5">
-          Allow promotions to apply to this product.
-        </p>
-      </div>
-      <USwitch v-model="form.discountable" />
+    <div class="border-t border-default">
+      <AppToggleRow v-model="form.discountable" label="Discountable" description="Allow promotions to apply to this product." />
     </div>
   </AppFormModal>
 </template>

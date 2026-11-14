@@ -4,7 +4,7 @@ defineProps<{ label: string, value?: string | number | null }>()
 </script>
 
 <template>
-  <div class="grid grid-cols-[9rem_1fr] gap-4 py-3 border-b border-muted last:border-b-0 text-sm">
+  <div class="grid grid-cols-[7rem_1fr] sm:grid-cols-[9rem_1fr] gap-4 py-3.5 sm:py-3 border-b border-muted last:border-b-0 text-[15px] sm:text-sm">
     <dt class="text-muted">
       {{ label }}
     </dt>

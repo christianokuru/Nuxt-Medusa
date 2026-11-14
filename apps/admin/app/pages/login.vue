@@ -44,7 +44,7 @@ async function onSubmit(event: FormSubmitEvent<LoginForm>) {
 </script>
 
 <template>
-  <UPageCard class="w-full max-w-sm">
+  <UPageCard class="w-full max-w-sm max-sm:ring-0 max-sm:bg-transparent max-sm:shadow-none" :ui="{ container: 'max-sm:p-0' }">
     <UAuthForm
       title="Welcome back"
       description="Log in to manage your store."

@@ -51,19 +51,19 @@ function makeCover(index: number) {
   <div>
     <div
       v-if="images.length || uploading"
-      class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-3"
+      class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-3"
     >
       <figure
         v-for="(image, index) in images"
         :key="image.url"
         class="group relative aspect-[4/5] rounded-md overflow-hidden bg-elevated"
-        :class="index === 0 ? 'col-span-2 row-span-2' : ''"
+        :class="index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''"
       >
         <img :src="image.url" alt="" class="size-full object-cover">
         <span v-if="index === 0" class="absolute left-2 top-2 eyebrow text-[10px] bg-default/90 text-highlighted rounded px-1.5 py-0.5">
           Cover
         </span>
-        <div class="absolute inset-0 flex items-end justify-end gap-1 p-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity bg-gradient-to-t from-black/40 to-transparent">
+        <div class="absolute inset-0 flex items-end justify-end gap-1 p-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 pointer-coarse:opacity-100 transition-opacity bg-gradient-to-t from-black/40 pointer-coarse:from-black/15 to-transparent">
           <UTooltip v-if="index !== 0" text="Make cover">
             <UButton icon="i-lucide-star" size="xs" color="neutral" variant="solid" aria-label="Make cover" @click="makeCover(index)" />
           </UTooltip>
@@ -83,7 +83,7 @@ function makeCover(index: number) {
 
     <button
       type="button"
-      class="w-full rounded-md border border-dashed px-6 py-8 text-center transition-colors"
+      class="w-full rounded-md border border-dashed px-6 py-8 text-center transition-colors active:bg-elevated"
       :class="dragging ? 'border-inverted bg-elevated' : 'border-accented hover:border-inverted hover:bg-muted'"
       @click="input?.click()"
       @dragover.prevent="dragging = true"
@@ -92,7 +92,7 @@ function makeCover(index: number) {
     >
       <UIcon name="i-lucide-image-plus" class="size-5 text-muted mb-2" />
       <p class="text-sm text-highlighted">
-        Drop images here or <span class="underline underline-offset-4">browse</span>
+        <span class="pointer-coarse:hidden">Drop images here or </span><span class="underline underline-offset-4 pointer-coarse:no-underline">browse<span class="hidden pointer-coarse:inline"> photos</span></span>
       </p>
       <p class="text-xs text-muted mt-1">
         PNG, JPG or WebP. The first image is the cover.

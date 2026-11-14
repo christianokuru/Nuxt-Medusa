@@ -261,16 +261,22 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
     fullscreen
     :dismissible="false"
     :close="false"
-    :ui="{ content: 'bg-default', header: 'hidden', body: 'p-0 sm:p-0', footer: 'border-t border-default px-6 sm:px-10 py-4 justify-between' }"
+    :ui="{ content: 'bg-default', header: 'hidden', body: 'p-0 sm:p-0', footer: 'border-t border-default px-5 sm:px-10 py-3 sm:py-4 justify-between gap-2 pb-[max(0.75rem,env(safe-area-inset-bottom))] max-sm:[&>*]:flex-none' }"
   >
     <template #body>
       <div class="min-h-full flex flex-col">
         <!-- Top bar -->
-        <div class="sticky top-0 z-10 bg-default/90 backdrop-blur border-b border-default">
-          <div class="flex items-center justify-between gap-4 px-6 sm:px-10 h-16">
-            <p class="eyebrow">
-              New product
-            </p>
+        <div class="sticky top-0 z-10 bg-default/90 backdrop-blur border-b border-default pt-[env(safe-area-inset-top)]">
+          <div class="flex items-center justify-between gap-4 px-5 sm:px-10 h-16">
+            <div class="min-w-0">
+              <p class="eyebrow">
+                New product
+              </p>
+              <p class="md:hidden text-sm text-highlighted mt-0.5 truncate">
+                {{ steps[step]?.label }}
+                <span class="text-muted">· {{ step + 1 }} of {{ steps.length }}</span>
+              </p>
+            </div>
             <ol class="hidden md:flex items-center gap-8">
               <li v-for="(s, i) in steps" :key="s.key">
                 <button
@@ -292,16 +298,19 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
             </ol>
             <UButton icon="i-lucide-x" color="neutral" variant="ghost" aria-label="Close" :disabled="!!saving" @click="emit('close', null)" />
           </div>
+          <div class="h-px bg-transparent">
+            <div class="h-px bg-inverted transition-[width] duration-500" :style="{ width: `${((step + 1) / steps.length) * 100}%` }" />
+          </div>
         </div>
 
-        <div class="flex-1 w-full max-w-3xl mx-auto px-6 sm:px-10 py-12 sm:py-16">
+        <div class="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-10 py-8 sm:py-16">
           <!-- Step 1: Details -->
           <div v-show="step === 0" class="space-y-10">
             <header>
-              <p class="eyebrow mb-3">
+              <p class="eyebrow mb-3 max-md:hidden">
                 Step 1 of 3
               </p>
-              <h2 class="display text-5xl">
+              <h2 class="display text-4xl sm:text-5xl">
                 Tell its story
               </h2>
               <p class="text-sm text-muted mt-3">
@@ -341,10 +350,10 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
           <!-- Step 2: Variants & pricing -->
           <div v-show="step === 1" class="space-y-10">
             <header>
-              <p class="eyebrow mb-3">
+              <p class="eyebrow mb-3 max-md:hidden">
                 Step 2 of 3
               </p>
-              <h2 class="display text-5xl">
+              <h2 class="display text-4xl sm:text-5xl">
                 Variants &amp; pricing
               </h2>
               <p class="text-sm text-muted mt-3">
@@ -352,16 +361,12 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
               </p>
             </header>
 
-            <div class="flex items-start justify-between gap-6 py-5 border-y border-default">
-              <div>
-                <p class="text-sm font-medium text-highlighted">
-                  This product has options
-                </p>
-                <p class="text-sm text-muted mt-0.5">
-                  For example size or colour. Each combination becomes a variant.
-                </p>
-              </div>
-              <USwitch v-model="form.hasOptions" />
+            <div class="border-y border-default">
+              <AppToggleRow
+                v-model="form.hasOptions"
+                label="This product has options"
+                description="For example size or colour. Each combination becomes a variant."
+              />
             </div>
 
             <!-- Single variant -->
@@ -381,12 +386,16 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
                 <div
                   v-for="(option, index) in form.options"
                   :key="index"
-                  class="grid gap-3 sm:grid-cols-[12rem_1fr_auto] items-start"
+                  class="grid grid-cols-[1fr_auto] gap-x-2 gap-y-3 sm:grid-cols-[12rem_1fr_auto] sm:gap-x-3 items-start max-sm:pb-4 max-sm:border-b max-sm:border-muted"
                 >
-                  <UFormField :label="index === 0 ? 'Option' : undefined">
+                  <UFormField :label="index === 0 ? 'Option' : undefined" :class="index === 0 ? '' : ''">
                     <UInput v-model="option.title" placeholder="Size" class="w-full" />
                   </UFormField>
-                  <UFormField :label="index === 0 ? 'Values' : undefined" :help="index === form.options.length - 1 ? 'Press Enter after each value.' : undefined">
+                  <UFormField
+                    :label="index === 0 ? 'Values' : undefined"
+                    :help="index === form.options.length - 1 ? 'Press Enter after each value.' : undefined"
+                    class="col-span-2 row-start-2 sm:col-span-1 sm:row-start-auto"
+                  >
                     <UInputTags v-model="option.values" placeholder="S, M, L" class="w-full" add-on-paste add-on-blur />
                   </UFormField>
                   <UButton
@@ -394,7 +403,8 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
                     color="neutral"
                     variant="ghost"
                     aria-label="Remove option"
-                    :class="index === 0 ? 'sm:mt-6' : ''"
+                    class="col-start-2 row-start-1 sm:col-start-3"
+                    :class="index === 0 ? 'mt-6' : ''"
                     @click="removeOption(index)"
                   />
                 </div>
@@ -433,14 +443,14 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
                     class="py-4 grid gap-3 sm:grid-cols-[minmax(0,12rem)_1fr] items-start transition-opacity"
                     :class="form.variants[comboKey(combo)]?.enabled ? '' : 'opacity-50'"
                   >
-                    <div class="flex items-center gap-3 sm:pt-2 min-w-0">
-                      <UCheckbox
-                        :model-value="form.variants[comboKey(combo)]?.enabled"
-                        :aria-label="`Include ${comboKey(combo)}`"
-                        @update:model-value="(v) => { const d = form.variants[comboKey(combo)]; if (d) d.enabled = !!v }"
-                      />
-                      <span class="text-sm font-medium text-highlighted truncate">{{ comboKey(combo) }}</span>
-                    </div>
+                    <UCheckbox
+                      :model-value="form.variants[comboKey(combo)]?.enabled"
+                      :label="comboKey(combo)"
+                      :aria-label="`Include ${comboKey(combo)}`"
+                      class="sm:pt-2 min-w-0 max-sm:min-h-11 max-sm:items-center"
+                      :ui="{ label: 'font-medium text-highlighted truncate' }"
+                      @update:model-value="(v) => { const d = form.variants[comboKey(combo)]; if (d) d.enabled = !!v }"
+                    />
                     <div v-if="form.variants[comboKey(combo)]?.enabled" class="grid gap-3 sm:grid-cols-[9rem_1fr]">
                       <UInput v-model="form.variants[comboKey(combo)]!.sku" placeholder="SKU" size="sm" />
                       <ProductPriceInputs v-model="form.variants[comboKey(combo)]!.prices" :currencies="currencies" compact size="sm" />
@@ -454,10 +464,10 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
           <!-- Step 3: Organise -->
           <div v-show="step === 2" class="space-y-10">
             <header>
-              <p class="eyebrow mb-3">
+              <p class="eyebrow mb-3 max-md:hidden">
                 Step 3 of 3
               </p>
-              <h2 class="display text-5xl">
+              <h2 class="display text-4xl sm:text-5xl">
                 Where it belongs
               </h2>
               <p class="text-sm text-muted mt-3">
@@ -534,13 +544,15 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
     <template #footer>
       <UButton
         v-if="step > 0"
-        label="Back"
         icon="i-lucide-arrow-left"
         color="neutral"
         variant="ghost"
+        aria-label="Back"
         :disabled="!!saving"
         @click="back"
-      />
+      >
+        <span class="max-sm:hidden">Back</span>
+      </UButton>
       <span v-else />
       <div class="flex items-center gap-2">
         <template v-if="step < steps.length - 1">
@@ -548,13 +560,14 @@ const categoryItems = computed(() => categories.value.map(c => ({ label: c.name,
         </template>
         <template v-else>
           <UButton
-            label="Save as draft"
             color="neutral"
             variant="outline"
             :loading="saving === 'draft'"
             :disabled="!!saving"
             @click="save('draft')"
-          />
+          >
+            Save<span class="max-sm:hidden">&nbsp;as</span>&nbsp;draft
+          </UButton>
           <UButton
             label="Publish"
             :loading="saving === 'published'"

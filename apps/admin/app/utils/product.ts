@@ -67,12 +67,37 @@ export function variantOptionLabel(
   if (!values.length) {
     return null
   }
-  const normalise = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()
-  return normalise(values.join(" ")) === normalise(variant.title ?? "") ? null : values.join(" · ")
+  // Compare as sets of words, so "S / Sand" and "Sand · S" count as the same.
+  const words = (s: string) => s.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).sort().join(" ")
+  return words(values.join(" ")) === words(variant.title ?? "") ? null : values.join(" · ")
 }
 
 export const DEFAULT_OPTION_TITLE = "Default option"
 export const DEFAULT_OPTION_VALUE = "Default option value"
+
+// Medusa returns a product's options in no fixed order. Sort them by
+// creation time (then id) so they always show in the same order.
+export function sortOptions<T extends { id: string, created_at?: string | Date | null }>(options: T[] | null | undefined): T[] {
+  return [...(options ?? [])].sort((a, b) => {
+    const time = new Date(a.created_at ?? 0).getTime() - new Date(b.created_at ?? 0).getTime()
+    return time || a.id.localeCompare(b.id)
+  })
+}
+
+// Options in the order the product's variant names use ("S / Sand" -> Size, Colour),
+// falling back to creation order. Keeps names and dropdowns consistent.
+export function productOptionsInOrder(product: HttpTypes.AdminProduct | null | undefined) {
+  const options = sortOptions(product?.options)
+  const parts = (product?.variants?.[0]?.title ?? "").split(" / ").map(s => s.trim())
+  const position = (o: HttpTypes.AdminProductOption) => {
+    const i = parts.findIndex(p => (o.values ?? []).some(v => v.value === p))
+    return i < 0 ? Number.MAX_SAFE_INTEGER : i
+  }
+  return options
+    .map((o, index) => ({ o, index, pos: position(o) }))
+    .sort((a, b) => a.pos - b.pos || a.index - b.index)
+    .map(x => x.o)
+}
 
 // Products without real options get one hidden "Default option".
 export function isDefaultOption(option?: { title?: string | null }) {

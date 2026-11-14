@@ -12,10 +12,10 @@ defineEmits<{ action: [] }>()
 </script>
 
 <template>
-  <section class="grid gap-6 py-10 border-b border-default last:border-b-0 lg:grid-cols-[14rem_1fr] lg:gap-12">
+  <section class="grid gap-5 py-8 sm:gap-6 sm:py-10 border-b border-default last:border-b-0 lg:grid-cols-[14rem_1fr] lg:gap-12">
     <div class="flex items-start justify-between gap-4 lg:flex-col lg:justify-start">
       <div>
-        <h2 class="font-display text-2xl text-highlighted leading-tight">
+        <h2 class="font-display text-[1.75rem] sm:text-2xl text-highlighted leading-tight">
           {{ title }}
         </h2>
         <p v-if="description" class="mt-1.5 text-sm text-muted leading-relaxed">

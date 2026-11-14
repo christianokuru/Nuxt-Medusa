@@ -38,3 +38,12 @@ The backend must be running, and `ADMIN_CORS` / `AUTH_CORS` in the backend setti
 - Small uppercase labels use the `eyebrow` class.
 - Edits happen in modals over the page. Use `AppFormModal` for new edit forms so they all look and behave the same.
 - Fonts are downloaded at build time and served with the app.
+
+## Mobile first
+
+- Base styles are for phones; `sm:` / `md:` / `lg:` add the larger layouts.
+- On phones every control is at least 44px tall and form fields use 16px text (no iOS zoom). These rules live in `app/app.config.ts` under `max-sm:`.
+- Modals become bottom sheets on phones. The create flow is full screen.
+- Lists switch from a table (tablet and up) to a simple list (phones).
+- Use `AppToggleRow` for switches so the whole row is tappable.
+- Hover-only controls must also show on touch screens (`pointer-coarse:`).

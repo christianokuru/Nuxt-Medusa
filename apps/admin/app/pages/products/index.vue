@@ -182,7 +182,7 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
     </template>
 
     <template #body>
-      <div class="w-full max-w-6xl mx-auto px-6 sm:px-10 py-10 sm:py-14">
+      <div class="w-full max-w-6xl mx-auto px-5 sm:px-10 pt-2 pb-10 sm:py-14">
         <AppPageHeader eyebrow="Catalogue" title="Products">
           <template #description>
             <span v-if="loadStatus !== 'pending' || data">{{ plural(total, filtered ? "result" : "product") }}</span>
@@ -193,13 +193,13 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
           </template>
         </AppPageHeader>
 
-        <div class="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between py-5">
-          <nav class="flex items-center gap-1 -ml-2.5 overflow-x-auto" aria-label="Filter by status">
+        <div class="flex flex-col-reverse gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between py-4 sm:py-5">
+          <nav class="flex items-center gap-1 -mx-5 px-5 sm:mx-0 sm:px-0 sm:-ml-2.5 overflow-x-auto [scrollbar-width:none]" aria-label="Filter by status">
             <button
               v-for="option in productStatusFilters"
               :key="option.value"
               type="button"
-              class="px-2.5 py-1.5 text-[13px] rounded-md transition-colors whitespace-nowrap"
+              class="px-3 py-2.5 sm:px-2.5 sm:py-1.5 text-sm sm:text-[13px] rounded-md transition-colors whitespace-nowrap"
               :class="status === option.value ? 'text-highlighted bg-elevated' : 'text-muted hover:text-highlighted'"
               @click="setQuery({ status: option.value, page: undefined })"
             >
@@ -228,15 +228,51 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
         />
 
         <template v-else>
-          <UTable
-            v-if="products.length || loadStatus === 'pending'"
-            :data="products"
-            :columns="columns"
-            :loading="loadStatus === 'pending' && !products.length"
-            loading-color="neutral"
-            class="-mt-1"
-            @select="onSelect"
-          />
+          <template v-if="products.length || loadStatus === 'pending'">
+            <!-- Phones: a simple list -->
+            <ul class="md:hidden divide-y divide-(--ui-border-muted) border-t border-default">
+              <li v-for="product in products" :key="product.id" class="flex items-center">
+                <NuxtLink :to="`/products/${product.id}`" class="flex flex-1 items-center gap-4 py-4 min-w-0 active:opacity-70">
+                  <div class="size-16 shrink-0 rounded-md bg-elevated overflow-hidden grid place-items-center">
+                    <img v-if="product.thumbnail" :src="product.thumbnail" alt="" class="size-full object-cover" loading="lazy">
+                    <UIcon v-else name="i-lucide-image" class="size-5 text-dimmed" />
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-base font-medium text-highlighted truncate">
+                      {{ product.title }}
+                    </p>
+                    <p class="text-sm text-muted truncate mt-0.5 tabular-nums">
+                      {{ priceRange(product.variants as never, defaultCurrency) ?? "No price" }}
+                      · {{ plural(product.variants?.length ?? 0, "variant") }}
+                    </p>
+                    <AppStatus :status="product.status" class="mt-1.5 text-[13px]" />
+                  </div>
+                </NuxtLink>
+                <UDropdownMenu :items="rowMenu(product)" :content="{ align: 'end' }">
+                  <UButton icon="i-lucide-ellipsis" color="neutral" variant="ghost" aria-label="Actions" class="-mr-2" />
+                </UDropdownMenu>
+              </li>
+              <template v-if="loadStatus === 'pending' && !products.length">
+                <li v-for="n in 4" :key="n" class="flex items-center gap-4 py-4">
+                  <USkeleton class="size-16 rounded-md" />
+                  <div class="flex-1 space-y-2">
+                    <USkeleton class="h-4 w-2/3" />
+                    <USkeleton class="h-3 w-1/3" />
+                  </div>
+                </li>
+              </template>
+            </ul>
+
+            <!-- Tablets and up: a table -->
+            <UTable
+              :data="products"
+              :columns="columns"
+              :loading="loadStatus === 'pending' && !products.length"
+              loading-color="neutral"
+              class="-mt-1 max-md:hidden"
+              @select="onSelect"
+            />
+          </template>
 
           <AppEmpty
             v-else-if="filtered"
@@ -257,7 +293,7 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
           </AppEmpty>
         </template>
 
-        <div v-if="total > PAGE_SIZE" class="flex items-center justify-between gap-3 pt-6 mt-2 border-t border-default">
+        <div v-if="total > PAGE_SIZE" class="flex flex-col-reverse items-center gap-3 sm:flex-row sm:justify-between pt-6 mt-2 border-t border-default">
           <p class="text-sm text-muted tabular-nums">
             {{ (page - 1) * PAGE_SIZE + 1 }}–{{ Math.min(page * PAGE_SIZE, total) }} of {{ total }}
           </p>

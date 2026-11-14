@@ -10,7 +10,13 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Admin",
-      meta: [{ name: "robots", content: "noindex, nofollow" }],
+      meta: [
+        { name: "robots", content: "noindex, nofollow" },
+        // Let the layout use the full screen on phones with a notch.
+        { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+        { name: "theme-color", content: "#fbfaf7", media: "(prefers-color-scheme: light)" },
+        { name: "theme-color", content: "#121110", media: "(prefers-color-scheme: dark)" },
+      ],
     },
   },
   runtimeConfig: {

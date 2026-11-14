@@ -80,3 +80,18 @@ body {
   line-height: 1.05;
   color: var(--ui-text-highlighted);
 }
+
+/* Bottom-sheet animation for modals on phones. */
+@keyframes sheet-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes sheet-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* No grey flash when tapping on iOS/Android. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}

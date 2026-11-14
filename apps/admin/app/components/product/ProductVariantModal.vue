@@ -10,7 +10,7 @@ defineEmits<{ close: [saved: boolean] }>()
 const medusa = useMedusa()
 const { data: currencies } = await useCatalog().currencies()
 
-const productOptions = computed(() => props.product.options ?? [])
+const productOptions = computed(() => productOptionsInOrder(props.product))
 const visibleOptions = computed(() => productOptions.value.filter(o => !isDefaultOption(o)))
 
 // Current value for each option, keyed by option title.
@@ -119,28 +119,13 @@ async function submit() {
     <ProductPriceInputs v-model="form.prices" :currencies="currencies" />
 
     <div class="divide-y divide-(--ui-border-muted) border-t border-default">
-      <div class="flex items-start justify-between gap-6 py-4">
-        <div>
-          <p class="text-sm font-medium text-highlighted">
-            Track stock
-          </p>
-          <p class="text-sm text-muted mt-0.5">
-            Keep count of how many are available.
-          </p>
-        </div>
-        <USwitch v-model="form.manageInventory" />
-      </div>
-      <div class="flex items-start justify-between gap-6 py-4">
-        <div>
-          <p class="text-sm font-medium text-highlighted">
-            Allow backorders
-          </p>
-          <p class="text-sm text-muted mt-0.5">
-            Keep selling when it's out of stock.
-          </p>
-        </div>
-        <USwitch v-model="form.allowBackorder" :disabled="!form.manageInventory" />
-      </div>
+      <AppToggleRow v-model="form.manageInventory" label="Track stock" description="Keep count of how many are available." />
+      <AppToggleRow
+        v-model="form.allowBackorder"
+        label="Allow backorders"
+        description="Keep selling when it's out of stock."
+        :disabled="!form.manageInventory"
+      />
     </div>
   </AppFormModal>
 </template>

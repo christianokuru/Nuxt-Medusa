@@ -61,12 +61,12 @@ watch(images, () => {
 })
 
 // ----- Derived values -----
-const realOptions = computed(() => (product.value?.options ?? []).filter(o => !isDefaultOption(o)))
+const options = computed(() => productOptionsInOrder(product.value))
+const realOptions = computed(() => options.value.filter(o => !isDefaultOption(o)))
 // Stable order: by rank, then by option values in the order they were defined (S, M, L...).
 const variants = computed(() => {
-  const options = product.value?.options ?? []
   const sortKey = (v: HttpTypes.AdminProductVariant) =>
-    options.map((o) => {
+    options.value.map((o) => {
       const value = v.options?.find(x => x.option_id === o.id)?.value
       const index = (o.values ?? []).findIndex(x => x.value === value)
       return index < 0 ? 999 : index
@@ -226,10 +226,10 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
     </template>
 
     <template #body>
-      <div class="w-full max-w-6xl mx-auto px-6 sm:px-10 py-8 sm:py-10">
+      <div class="w-full max-w-6xl mx-auto px-5 sm:px-10 pt-0 pb-10 sm:py-10">
         <!-- Top bar -->
-        <div class="flex items-center justify-between gap-4 mb-10">
-          <NuxtLink to="/products" class="inline-flex items-center gap-2 text-[13px] text-muted hover:text-highlighted transition-colors">
+        <div class="flex items-center justify-between gap-3 mb-6 sm:mb-10">
+          <NuxtLink to="/products" class="inline-flex items-center gap-2 min-h-11 -ml-1 pl-1 pr-3 text-sm sm:text-[13px] text-muted hover:text-highlighted transition-colors">
             <UIcon name="i-lucide-arrow-left" class="size-4" />
             Products
           </NuxtLink>
@@ -257,10 +257,23 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
 
         <template v-else-if="product">
           <!-- Hero -->
-          <div class="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16 pb-12 border-b border-default">
+          <div class="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16 pb-10 sm:pb-12 border-b border-default">
+            <!-- Phones: name above the image -->
+            <div class="lg:hidden">
+              <p class="eyebrow mb-3">
+                {{ [product.collection?.title, product.type?.value].filter(Boolean).join(" · ") || "Product" }}
+              </p>
+              <h1 class="display text-[2.75rem] break-words">
+                {{ product.title }}
+              </h1>
+              <p v-if="product.subtitle" class="font-display italic text-xl text-muted mt-2">
+                {{ product.subtitle }}
+              </p>
+            </div>
+
             <!-- Gallery -->
             <div>
-              <div class="relative aspect-[4/5] rounded-lg overflow-hidden bg-elevated">
+              <div class="relative aspect-square sm:aspect-[4/5] rounded-lg overflow-hidden bg-elevated">
                 <img
                   v-if="images[activeImage]"
                   :src="images[activeImage]!.url"
@@ -277,7 +290,7 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
                   <span class="text-sm">Add images</span>
                 </button>
               </div>
-              <div v-if="images.length > 1" class="flex gap-2 mt-3 overflow-x-auto">
+              <div v-if="images.length > 1" class="flex gap-2 mt-3 overflow-x-auto [scrollbar-width:none] -mx-5 px-5 sm:mx-0 sm:px-0">
                 <button
                   v-for="(image, index) in images"
                   :key="image.id"
@@ -294,17 +307,17 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
 
             <!-- Summary -->
             <div class="flex flex-col lg:pt-6">
-              <p class="eyebrow mb-4">
+              <p class="eyebrow mb-4 max-lg:hidden">
                 {{ [product.collection?.title, product.type?.value].filter(Boolean).join(" · ") || "Product" }}
               </p>
-              <h1 class="display text-5xl sm:text-6xl break-words">
+              <h2 class="display text-6xl break-words max-lg:hidden">
                 {{ product.title }}
-              </h1>
-              <p v-if="product.subtitle" class="font-display italic text-2xl text-muted mt-3">
+              </h2>
+              <p v-if="product.subtitle" class="font-display italic text-2xl text-muted mt-3 max-lg:hidden">
                 {{ product.subtitle }}
               </p>
 
-              <div v-if="product.description" class="mt-8 max-w-prose">
+              <div v-if="product.description" class="lg:mt-8 max-w-prose">
                 <p
                   class="text-[15px] leading-7 text-toned whitespace-pre-line"
                   :class="longDescription && !showFullDescription ? 'line-clamp-6' : ''"
@@ -314,7 +327,7 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
                 <button
                   v-if="longDescription"
                   type="button"
-                  class="mt-2 text-[13px] text-highlighted underline underline-offset-4"
+                  class="mt-1 min-h-11 text-sm sm:text-[13px] text-highlighted underline underline-offset-4"
                   @click="showFullDescription = !showFullDescription"
                 >
                   {{ showFullDescription ? "Show less" : "Read more" }}
@@ -323,14 +336,14 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
               <button
                 v-else
                 type="button"
-                class="mt-8 text-left text-[15px] text-dimmed italic hover:text-muted transition-colors"
+                class="lg:mt-8 min-h-11 text-left text-[15px] text-dimmed italic hover:text-muted transition-colors"
                 @click="openModal(LazyProductDetailsModal)"
               >
                 Add a description…
               </button>
 
-              <dl class="grid grid-cols-3 mt-10 border-y border-default divide-x divide-(--ui-border)">
-                <div class="py-5 pr-4">
+              <dl class="grid grid-cols-2 sm:grid-cols-3 mt-8 sm:mt-10 border-y border-default">
+                <div class="py-5 pr-4 col-span-2 sm:col-span-1 max-sm:border-b border-default sm:border-r">
                   <dt class="eyebrow">
                     Price
                   </dt>
@@ -338,7 +351,7 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
                     {{ price ?? "—" }}
                   </dd>
                 </div>
-                <div class="py-5 px-4">
+                <div class="py-5 pr-4 sm:px-4 border-r border-default">
                   <dt class="eyebrow">
                     Variants
                   </dt>
@@ -356,13 +369,13 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
                 </div>
               </dl>
 
-              <div class="flex items-center gap-6 mt-6 text-[13px] text-muted">
+              <div class="flex flex-wrap items-center gap-x-6 gap-y-1 mt-5 text-[13px] text-muted">
                 <span>/{{ product.handle }}</span>
                 <span>Added {{ formatDate(product.created_at) }}</span>
               </div>
 
-              <div class="mt-8">
-                <UButton label="Edit details" icon="i-lucide-pencil" color="neutral" variant="outline" @click="openModal(LazyProductDetailsModal)" />
+              <div class="mt-6 sm:mt-8">
+                <UButton label="Edit details" icon="i-lucide-pencil" color="neutral" variant="outline" class="max-sm:w-full" @click="openModal(LazyProductDetailsModal)" />
               </div>
             </div>
           </div>
@@ -379,7 +392,7 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
               <li
                 v-for="variant in variants"
                 :key="variant.id"
-                class="group flex items-center gap-4 py-4 cursor-pointer"
+                class="group flex items-center gap-3 sm:gap-4 py-3 sm:py-4 cursor-pointer active:bg-muted/60"
                 @click="openModal(LazyProductVariantModal, { variant }, 'Variant saved')"
               >
                 <div class="min-w-0 flex-1">
@@ -387,13 +400,13 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
                     {{ variant.title }}
                   </p>
                   <p class="text-xs text-muted mt-0.5 truncate">
-                    {{ [variant.sku ?? "No SKU", variantOptionLabel(variant, product.options ?? [])].filter(Boolean).join(" · ") }}
+                    {{ [variant.sku ?? "No SKU", variantOptionLabel(variant, options)].filter(Boolean).join(" · ") }}
                   </p>
                 </div>
                 <span class="text-xs text-muted hidden sm:inline">
                   {{ variant.manage_inventory ? "Stock tracked" : "Not tracked" }}
                 </span>
-                <span class="text-sm text-highlighted tabular-nums w-24 text-right">
+                <span class="text-sm text-highlighted tabular-nums sm:w-24 text-right">
                   {{ variantPrice(variant) ?? "—" }}
                 </span>
                 <UDropdownMenu :items="variantMenu(variant)" :content="{ align: 'end' }">
@@ -412,11 +425,11 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
             @action="openModal(LazyProductOptionModal, {}, 'Option added')"
           >
             <ul v-if="realOptions.length" class="divide-y divide-(--ui-border-muted) border-y border-default">
-              <li v-for="option in realOptions" :key="option.id" class="flex items-start gap-6 py-4">
-                <p class="text-sm font-medium text-highlighted w-32 shrink-0 pt-1">
+              <li v-for="option in realOptions" :key="option.id" class="flex flex-wrap sm:flex-nowrap items-start gap-x-6 gap-y-2 py-4">
+                <p class="text-sm font-medium text-highlighted sm:w-32 shrink-0 pt-1 max-sm:flex-1 max-sm:pt-3">
                   {{ option.title }}
                 </p>
-                <div class="flex flex-wrap gap-1.5 flex-1">
+                <div class="flex flex-wrap gap-1.5 flex-1 max-sm:order-last max-sm:basis-full">
                   <span
                     v-for="value in option.values"
                     :key="value.id"
@@ -443,7 +456,7 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
             action-icon="i-lucide-images"
             @action="openModal(LazyProductMediaModal, {}, 'Media updated')"
           >
-            <div v-if="images.length" class="grid grid-cols-3 sm:grid-cols-5 gap-3">
+            <div v-if="images.length" class="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-3">
               <div v-for="image in images" :key="image.id" class="aspect-[4/5] rounded-md overflow-hidden bg-elevated">
                 <img :src="image.url" alt="" class="size-full object-cover" loading="lazy">
               </div>
@@ -518,8 +531,8 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
         </template>
 
         <!-- Loading -->
-        <div v-else class="grid gap-16 lg:grid-cols-[5fr_6fr]">
-          <USkeleton class="aspect-[4/5] rounded-lg" />
+        <div v-else class="grid gap-8 lg:gap-16 lg:grid-cols-[5fr_6fr]">
+          <USkeleton class="aspect-square sm:aspect-[4/5] rounded-lg" />
           <div class="space-y-4 pt-6">
             <USkeleton class="h-3 w-24" />
             <USkeleton class="h-14 w-3/4" />
