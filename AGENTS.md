@@ -5,7 +5,7 @@
 Medusa 2 backend with Vue/Nuxt front ends instead of the official React admin and Next.js store.
 
 - `apps/backend` - Medusa server. React admin is disabled; do not add `src/admin` or React packages.
-- `apps/admin` - Nuxt admin dashboard (planned). Talks to the Medusa Admin API.
+- `apps/admin` - Nuxt 4 admin (SPA, `ssr: false`) with Nuxt UI. Calls the Admin API through `useMedusa()` (`@medusajs/js-sdk`, session auth). Pages need login unless `definePageMeta({ public: true })`.
 - `apps/storefront` - Nuxt store (planned). Talks to the Medusa Store API.
 - `packages/*` - shared Nuxt modules (planned).
 
@@ -28,5 +28,6 @@ npm run services:up        # Postgres + Redis (docker)
 npm run backend:migrate
 npm run dev
 npm run lint
+npm run typecheck          # admin
 cd apps/backend && npm run test:unit
 ```

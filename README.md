@@ -7,7 +7,7 @@ A [Medusa](https://medusajs.com) commerce backend with a Vue/Nuxt admin and stor
 ```
 apps/
   backend/      Medusa 2 server (React admin turned off)
-  admin/        Nuxt admin dashboard            (coming next)
+  admin/        Nuxt admin dashboard (Vue)
   storefront/   Nuxt store                      (coming later)
 packages/       Shared Nuxt modules             (coming later)
 docker-compose.yml   PostgreSQL + Redis for local development
@@ -40,7 +40,8 @@ npm run backend:user -- -e admin@example.com -p supersecret
 npm run dev
 ```
 
-The backend runs at http://localhost:9000. Check it with http://localhost:9000/health.
+- Backend: http://localhost:9000 (check http://localhost:9000/health)
+- Admin: http://localhost:3001 (log in with the user from step 5)
 
 Optional: add demo products with `npm run backend:seed`.
 
@@ -55,6 +56,14 @@ Optional: add demo products with `npm run backend:seed`.
 | `JWT_SECRET`, `COOKIE_SECRET` | Use long random values in production. |
 | `MEDUSA_WORKER_MODE` | `shared` for dev. In production run one `server` and one `worker`. |
 
+## Admin settings (apps/admin/.env)
+
+| Setting | What it does |
+| --- | --- |
+| `NUXT_PUBLIC_MEDUSA_BACKEND_URL` | Where the backend runs. Default `http://localhost:9000`. |
+
+The admin is a static site. Build it with `npm run generate --workspace=@nuxt-medusa/admin` and upload `apps/admin/.output/public` to any static host. Add the admin's address to `ADMIN_CORS` and `AUTH_CORS` in the backend settings.
+
 ## Using Supabase as the database
 
 1. Use the **Session pooler** connection string (port 5432), not the Transaction pooler.
@@ -67,6 +76,8 @@ Optional: add demo products with `npm run backend:seed`.
 | --- | --- |
 | `npm run dev` | Start all apps |
 | `npm run backend:dev` | Start only the backend |
+| `npm run admin:dev` | Start only the admin |
+| `npm run typecheck` | Type-check the admin |
 | `npm run backend:migrate` | Run database migrations |
 | `npm run backend:seed` | Add demo products |
 | `npm run backend:user -- -e EMAIL -p PASSWORD` | Create an admin user |

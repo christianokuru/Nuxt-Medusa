@@ -16,7 +16,9 @@
     "backend:dev": "turbo dev --filter=@nuxt-medusa/backend",
     "backend:migrate": "npm run db:migrate --workspace=@nuxt-medusa/backend",
     "backend:seed": "npm run seed --workspace=@nuxt-medusa/backend",
-    "backend:user": "npm exec --workspace=@nuxt-medusa/backend -- medusa user"
+    "backend:user": "npm exec --workspace=@nuxt-medusa/backend -- medusa user",
+    "admin:dev": "turbo dev --filter=@nuxt-medusa/admin",
+    "typecheck": "turbo typecheck"
   },
   "devDependencies": {
     "@medusajs/eslint-plugin": "2.22.7",
