@@ -87,6 +87,11 @@ If a widget throws an error, only that widget is hidden. The rest of the page ke
 | `product.list.after` | Products list, at the bottom | `{}` |
 | `product.details.before` | Product page, above the main details | `{ product, refresh }` |
 | `product.details.after` | Product page, after the last section | `{ product, refresh }` |
+| `order.list.before` | Orders list, under the header | `{}` |
+| `order.details.before` | Order page, under the header | `{ order, refresh }` |
+| `order.details.after` | Order page, at the bottom | `{ order, refresh }` |
+| `customer.details.before` | Customer page, under the header | `{ customer, refresh }` |
+| `customer.details.after` | Customer page, at the bottom | `{ customer, refresh }` |
 
 To add a zone: add it to `AdminZones` in `src/runtime/define.ts`, then place `<AdminZone name="..." :data="..." />` in the page.
 

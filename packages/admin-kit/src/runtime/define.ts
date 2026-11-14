@@ -12,6 +12,23 @@ export interface AdminZones {
   "product.list.after": Record<string, never>
   "product.details.before": AdminProductZoneData
   "product.details.after": AdminProductZoneData
+  "order.list.before": Record<string, never>
+  "order.details.before": AdminOrderZoneData
+  "order.details.after": AdminOrderZoneData
+  "customer.details.before": AdminCustomerZoneData
+  "customer.details.after": AdminCustomerZoneData
+}
+
+export interface AdminOrderZoneData {
+  order: HttpTypes.AdminOrder
+  /** Reload the order after the widget changes it. */
+  refresh: () => Promise<void>
+}
+
+export interface AdminCustomerZoneData {
+  customer: HttpTypes.AdminCustomer
+  /** Reload the customer after the widget changes it. */
+  refresh: () => Promise<void>
 }
 
 export interface AdminProductZoneData {
@@ -27,6 +44,11 @@ export const adminZoneNames = [
   "product.list.after",
   "product.details.before",
   "product.details.after",
+  "order.list.before",
+  "order.details.before",
+  "order.details.after",
+  "customer.details.before",
+  "customer.details.after",
 ] as const satisfies readonly AdminZoneName[]
 
 /** Props a widget component receives: `defineProps<AdminWidgetProps<"product.details.after">>()` */

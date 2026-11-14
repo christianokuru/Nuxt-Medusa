@@ -44,6 +44,8 @@ npm run dev
 - Backend: http://localhost:9000 (check http://localhost:9000/health)
 - Admin: http://localhost:3001 (log in with the user from step 5)
 
+Admin screens: Orders, Products, Inventory, Customers, Settings (store, currencies, regions and payments).
+
 Optional: add demo products with `npm run backend:seed`.
 
 ## Settings (apps/backend/.env)
@@ -64,6 +66,35 @@ Optional: add demo products with `npm run backend:seed`.
 | `NUXT_PUBLIC_MEDUSA_BACKEND_URL` | Where the backend runs. Default `http://localhost:9000`. |
 
 The admin is a static site. Build it with `npm run generate --workspace=@nuxt-medusa/admin` and upload `apps/admin/.output/public` to any static host. Add the admin's address to `ADMIN_CORS` and `AUTH_CORS` in the backend settings.
+
+## Payments: Paystack and Flutterwave
+
+Both are built in (`apps/backend/src/modules/paystack` and `.../flutterwave`). Each turns on only when its key is set.
+
+1. Add the keys to `apps/backend/.env`:
+
+   | Setting | Where to find it |
+   | --- | --- |
+   | `PAYSTACK_SECRET_KEY` | Paystack dashboard → Settings → API Keys & Webhooks (`sk_test_...` or `sk_live_...`) |
+   | `PAYSTACK_CALLBACK_URL` | Your store page that finishes checkout after payment |
+   | `FLUTTERWAVE_SECRET_KEY` | Flutterwave dashboard → Settings → API Keys |
+   | `FLUTTERWAVE_WEBHOOK_HASH` | Any secret you choose; enter the same value in Flutterwave → Settings → Webhooks |
+   | `FLUTTERWAVE_REDIRECT_URL` | Your store page that finishes checkout after payment |
+
+2. Set the webhook URLs in each dashboard:
+   - Paystack: `https://<your-backend>/hooks/payment/paystack_paystack`
+   - Flutterwave: `https://<your-backend>/hooks/payment/flutterwave_flutterwave`
+3. Restart the backend.
+4. In the admin, go to **Settings → Store → Currencies** and add the currency (for example NGN).
+5. In **Settings → Regions**, create or edit a region with that currency and tick Paystack and/or Flutterwave.
+
+How payments are checked:
+- Paystack webhooks are verified with an HMAC-SHA512 signature of the raw body (`x-paystack-signature`).
+- Flutterwave webhooks are verified with the `verif-hash` header.
+- In both cases the payment is then confirmed with the provider's API before the order is marked paid, and the amount and currency must match.
+- Both providers charge immediately, so successful payments show as "Paid" (no separate collect step).
+
+Run the provider tests with `cd apps/backend && npm run test:unit`.
 
 ## Using Supabase as the database
 

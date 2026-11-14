@@ -6,10 +6,10 @@ export const navigationGroups: { label: string, items: NavigationMenuItem[] }[] 
   {
     label: "Commerce",
     items: [
-      { label: "Orders", icon: "i-lucide-shopping-bag", disabled: true },
+      { label: "Orders", icon: "i-lucide-shopping-bag", to: "/orders" },
       { label: "Products", icon: "i-lucide-tag", to: "/products" },
-      { label: "Inventory", icon: "i-lucide-boxes", disabled: true },
-      { label: "Customers", icon: "i-lucide-users", disabled: true },
+      { label: "Inventory", icon: "i-lucide-boxes", to: "/inventory" },
+      { label: "Customers", icon: "i-lucide-users", to: "/customers" },
     ],
   },
   {
@@ -22,5 +22,5 @@ export const navigationGroups: { label: string, items: NavigationMenuItem[] }[] 
 ]
 
 export const footerNavigation: NavigationMenuItem[] = [
-  { label: "Settings", icon: "i-lucide-settings-2", disabled: true },
+  { label: "Settings", icon: "i-lucide-settings-2", to: "/settings" },
 ]

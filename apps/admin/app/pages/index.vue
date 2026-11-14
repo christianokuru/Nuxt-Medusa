@@ -1,6 +1,6 @@
 <script setup lang="ts">
-// No dashboard home yet: send people to products.
-await navigateTo("/products", { replace: true })
+// No dashboard home yet: start on orders.
+await navigateTo("/orders", { replace: true })
 </script>
 
 <template>

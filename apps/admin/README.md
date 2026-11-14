@@ -25,7 +25,9 @@ The backend must be running, and `ADMIN_CORS` / `AUTH_CORS` in the backend setti
 | `app/middleware/auth.global.ts` | Sends logged-out users to `/login` |
 | `app/layouts/default.vue` | Sidebar and user menu |
 | `app/utils/navigation.ts` | Sidebar links |
-| `app/pages/` | Pages (`login`, `products`, `products/[id]`) |
+| `app/pages/` | Pages: `orders`, `products`, `inventory`, `customers`, `settings/store`, `settings/regions`, `login` |
+| `app/components/order/`, `customer/`, `inventory/`, `settings/` | Modals for each area |
+| `app/utils/orders.ts`, `payments.ts`, `countries.ts` | Status labels, payment provider names, country names and flags |
 | `app/components/app/` | Shared pieces: page header, section, field, status, empty state, confirm and form modals |
 | `app/components/product/` | Product modals (create, edit details, media, variants, options...) |
 | `app/composables/useCatalog.ts` | Shared lists: collections, tags, channels, currencies... |
