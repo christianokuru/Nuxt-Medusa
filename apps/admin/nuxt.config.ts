@@ -3,7 +3,9 @@
 export default defineNuxtConfig({
   compatibilityDate: "2026-11-01",
   ssr: false,
-  modules: ["@nuxt/ui"],
+  // admin-kit: extension system (widgets in zones, sidebar links). Extensions live in
+  // ./layers/<name>/ (picked up automatically) or in packages listed under `extends`.
+  modules: ["@nuxt/ui", "@nuxt-medusa/admin-kit"],
   css: ["~/assets/css/main.css"],
   devtools: { enabled: true },
   devServer: { port: 3001 },
@@ -29,7 +31,7 @@ export default defineNuxtConfig({
     // Bundle the Lucide icons we use into the app, so none are fetched online.
     serverBundle: "local",
     clientBundle: {
-      scan: { globInclude: ["app/**/*.{vue,ts}"] },
+      scan: { globInclude: ["app/**/*.{vue,ts}", "layers/**/*.{vue,ts}"] },
     },
   },
 })

@@ -193,6 +193,8 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
           </template>
         </AppPageHeader>
 
+        <AdminZone name="product.list.before" />
+
         <div class="flex flex-col-reverse gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between py-4 sm:py-5">
           <nav class="flex items-center gap-1 -mx-5 px-5 sm:mx-0 sm:px-0 sm:-ml-2.5 overflow-x-auto [scrollbar-width:none]" aria-label="Filter by status">
             <button
@@ -306,6 +308,8 @@ function onSelect(e: Event, row: { original: HttpTypes.AdminProduct }) {
             @update:page="(p: number) => setQuery({ page: p })"
           />
         </div>
+
+        <AdminZone name="product.list.after" />
       </div>
     </template>
   </UDashboardPanel>

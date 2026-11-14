@@ -30,6 +30,7 @@ The backend must be running, and `ADMIN_CORS` / `AUTH_CORS` in the backend setti
 | `app/components/product/` | Product modals (create, edit details, media, variants, options...) |
 | `app/composables/useCatalog.ts` | Shared lists: collections, tags, channels, currencies... |
 | `app/assets/css/main.css` | Design tokens: colours, fonts |
+| `layers/` | Admin extensions (each folder is one). `layers/notes` is an example. |
 
 ## Design
 

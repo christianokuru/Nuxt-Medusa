@@ -9,7 +9,8 @@ apps/
   backend/      Medusa 2 server (React admin turned off)
   admin/        Nuxt admin dashboard (Vue)
   storefront/   Nuxt store                      (coming later)
-packages/       Shared Nuxt modules             (coming later)
+packages/
+  admin-kit/    Extension system for the admin (widgets and pages)
 docker-compose.yml   PostgreSQL + Redis for local development
 ```
 
@@ -83,6 +84,10 @@ The admin is a static site. Build it with `npm run generate --workspace=@nuxt-me
 | `npm run backend:user -- -e EMAIL -p PASSWORD` | Create an admin user |
 | `npm run services:up` / `services:down` | Start or stop PostgreSQL and Redis |
 | `npm run lint` | Lint all apps |
+
+## Admin extensions
+
+Add widgets to admin pages and new pages to the sidebar without touching the admin's core files. Drop a Nuxt layer with an `admin.extension.ts` into `apps/admin/layers/`. See `packages/admin-kit/README.md` and the example in `apps/admin/layers/notes/`.
 
 ## License
 

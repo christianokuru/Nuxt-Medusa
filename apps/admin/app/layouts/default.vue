@@ -32,6 +32,22 @@ const userMenu = computed<DropdownMenuItem[][]>(() => [
   [{ label: "Log out", icon: "i-lucide-log-out", onSelect: () => logout() }],
 ])
 
+// Built-in groups plus links added by extensions.
+const extensions = useAdminExtensions()
+const groups = computed(() => {
+  const result = navigationGroups.map(g => ({ label: g.label, items: [...g.items] }))
+  for (const item of extensions.nav) {
+    const label = item.group ?? "Extensions"
+    let group = result.find(g => g.label === label)
+    if (!group) {
+      group = { label, items: [] }
+      result.push(group)
+    }
+    group.items.push({ label: item.label, icon: item.icon ?? "i-lucide-puzzle", to: item.to })
+  }
+  return result
+})
+
 const navUi = {
   link: "text-base sm:text-[13px] py-2.5 sm:py-1.5 text-toned data-[disabled]:opacity-40 data-[disabled]:cursor-default",
   linkLeadingIcon: "size-4",
@@ -60,7 +76,7 @@ const navUi = {
       </template>
 
       <template #default="{ collapsed }">
-        <div v-for="group in navigationGroups" :key="group.label">
+        <div v-for="group in groups" :key="group.label">
           <p v-if="!collapsed" class="eyebrow px-2.5 mb-2">
             {{ group.label }}
           </p>

@@ -210,6 +210,14 @@ function optionMenu(option: HttpTypes.AdminProductOption): DropdownMenuItem[][] 
   ]
 }
 
+// Data passed to extension widgets on this page.
+const zoneData = computed(() => ({
+  product: product.value!,
+  refresh: async () => {
+    await refresh()
+  },
+}))
+
 // Description: show a short version first.
 const showFullDescription = ref(false)
 const longDescription = computed(() => (product.value?.description?.length ?? 0) > 420)
@@ -256,6 +264,8 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
         />
 
         <template v-else-if="product">
+          <AdminZone name="product.details.before" :data="zoneData" />
+
           <!-- Hero -->
           <div class="grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16 pb-10 sm:pb-12 border-b border-default">
             <!-- Phones: name above the image -->
@@ -528,6 +538,8 @@ const longDescription = computed(() => (product.value?.description?.length ?? 0)
               <AppField label="MID code" :value="product.mid_code" />
             </dl>
           </AppSection>
+
+          <AdminZone name="product.details.after" :data="zoneData" />
         </template>
 
         <!-- Loading -->
