@@ -8,3 +8,7 @@ export function formatDate(value?: string | Date | null) {
     day: "numeric",
   }).format(new Date(value))
 }
+
+export function plural(count: number, one: string, many = `${one}s`) {
+  return `${count} ${count === 1 ? one : many}`
+}

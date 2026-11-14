@@ -62,3 +62,6 @@ Thumbs.db
 **/.DS_Store
 # Redis local dump
 dump.rdb
+
+# Medusa local file uploads
+apps/backend/static/
