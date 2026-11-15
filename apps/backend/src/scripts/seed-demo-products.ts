@@ -341,15 +341,24 @@ export default async function seedDemoProducts({ container }: ExecArgs) {
     fields: ['id'],
   })
 
-  for (let start = 0; start < allProducts.length; start += INGEST_CHUNK_SIZE) {
-    const chunk = allProducts.slice(start, start + INGEST_CHUNK_SIZE)
+  try {
+    for (let start = 0; start < allProducts.length; start += INGEST_CHUNK_SIZE) {
+      const chunk = allProducts.slice(start, start + INGEST_CHUNK_SIZE)
 
-    await search.ingest({
-      name: 'product.created',
-      data: chunk.map((product) => ({ id: product.id })),
-    } as never)
+      await search.ingest({
+        name: 'product.created',
+        data: chunk.map((product) => ({ id: product.id })),
+      } as never)
+    }
+    logger.info(`Search index caught up for ${allProducts.length} product(s).`)
+  } catch (error) {
+    // On a fresh database the search index is only built the first time the
+    // backend starts, and that first build includes every product.
+    if (!MedusaError.isMedusaError(error) || error.type !== MedusaError.Types.NOT_FOUND) {
+      throw error
+    }
+    logger.info('Search index not built yet. It will include these products when the backend starts.')
   }
 
-  logger.info(`Search index caught up for ${allProducts.length} product(s).`)
   logger.info('Done. Open the store page to see the new products.')
 }
