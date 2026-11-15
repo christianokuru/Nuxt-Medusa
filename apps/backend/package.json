@@ -27,6 +27,10 @@
     "@medusajs/draft-order": "2.22.7",
     "@medusajs/framework": "2.22.7",
     "@medusajs/medusa": "2.22.7",
+    "@nuxt-medusa/flutterwave": "*",
+    "@nuxt-medusa/medusa-analytics": "*",
+    "@nuxt-medusa/medusa-resend": "*",
+    "@nuxt-medusa/paystack": "*",
     "zod": "4.2.0"
   },
   "devDependencies": {

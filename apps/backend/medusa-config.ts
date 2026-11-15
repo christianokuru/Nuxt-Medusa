@@ -52,6 +52,55 @@ const redisModules = REDIS_URL
     ]
   : []
 
+// Payment providers. Each is turned on only when its secret key is set.
+// Provider ids in Medusa: pp_paystack_paystack, pp_flutterwave_flutterwave.
+// Webhook URLs: <backend>/hooks/payment/paystack_paystack and /hooks/payment/flutterwave_flutterwave
+const paymentProviders = [
+  process.env.PAYSTACK_SECRET_KEY && {
+    resolve: "@nuxt-medusa/paystack/medusa",
+    id: "paystack",
+    options: {
+      secretKey: process.env.PAYSTACK_SECRET_KEY,
+      callbackUrl: process.env.PAYSTACK_CALLBACK_URL,
+    },
+  },
+  process.env.FLUTTERWAVE_SECRET_KEY && {
+    resolve: "@nuxt-medusa/flutterwave/medusa",
+    id: "flutterwave",
+    options: {
+      secretKey: process.env.FLUTTERWAVE_SECRET_KEY,
+      webhookHash: process.env.FLUTTERWAVE_WEBHOOK_HASH,
+      redirectUrl: process.env.FLUTTERWAVE_REDIRECT_URL,
+      storeName: process.env.STORE_NAME,
+    },
+  },
+].filter(Boolean) as { resolve: string, id: string, options: Record<string, unknown> }[]
+
+const paymentModule = paymentProviders.length
+  ? [{ key: Modules.PAYMENT, resolve: "@medusajs/medusa/payment", options: { providers: paymentProviders } }]
+  : []
+
+// Order emails through Resend. Turned on only when the API key is set.
+// Provider: sends the emails. Plugin (below): decides when, and what they look like.
+const notificationModule = process.env.RESEND_API_KEY
+  ? [{
+      key: Modules.NOTIFICATION,
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [{
+          resolve: "@nuxt-medusa/medusa-resend/providers/resend",
+          id: "resend",
+          options: {
+            channels: ["email"],
+            apiKey: process.env.RESEND_API_KEY,
+            from: process.env.RESEND_FROM,
+            replyTo: process.env.RESEND_REPLY_TO,
+          },
+        }],
+      },
+    }]
+  : []
+
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
@@ -77,5 +126,22 @@ module.exports = defineConfig({
   admin: {
     disable: true,
   },
-  modules: redisModules,
+  modules: [...redisModules, ...paymentModule, ...notificationModule],
+  plugins: [
+    // Sales summary API used by the admin's Home page.
+    { resolve: "@nuxt-medusa/medusa-analytics", options: {} },
+    // Order emails: confirmation, shipped, delivered. Admin: Settings → Emails.
+    {
+      resolve: "@nuxt-medusa/medusa-resend",
+      options: {
+        brand: {
+          logoUrl: process.env.EMAIL_LOGO_URL || undefined,
+          storeUrl: process.env.STOREFRONT_URL || undefined,
+          supportEmail: process.env.SUPPORT_EMAIL || undefined,
+        },
+        // e.g. "https://shop.example.com/account/orders/{id}"
+        orderUrl: process.env.ORDER_URL || undefined,
+      },
+    },
+  ],
 })

@@ -1,0 +1,97 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+/*
+ * Design direction: editorial and calm.
+ * Warm paper background, ink-black actions, serif display type,
+ * hairline rules instead of heavy boxes, and plenty of white space.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+}
+
+:root {
+  --ui-radius: 0.375rem;
+
+  --ui-bg: #fbfaf7;
+  --ui-bg-muted: #f5f3ee;
+  --ui-bg-elevated: #efece5;
+  --ui-bg-accented: #e5e1d8;
+  --ui-bg-inverted: #171614;
+
+  --ui-border: #e6e2d9;
+  --ui-border-muted: #eeebe4;
+  --ui-border-accented: #d6d1c5;
+  --ui-border-inverted: #171614;
+
+  --ui-text-dimmed: #a8a398;
+  --ui-text-muted: #7c776c;
+  --ui-text-toned: #57534b;
+  --ui-text: #34322d;
+  --ui-text-highlighted: #171614;
+  --ui-text-inverted: #fbfaf7;
+
+  --ui-primary: #171614;
+}
+
+.dark {
+  --ui-bg: #121110;
+  --ui-bg-muted: #191816;
+  --ui-bg-elevated: #201f1c;
+  --ui-bg-accented: #2b2a26;
+  --ui-bg-inverted: #f6f4ee;
+
+  --ui-border: #2a2925;
+  --ui-border-muted: #211f1d;
+  --ui-border-accented: #3a3833;
+  --ui-border-inverted: #f6f4ee;
+
+  --ui-text-dimmed: #66625a;
+  --ui-text-muted: #8f8b81;
+  --ui-text-toned: #b4b0a6;
+  --ui-text: #d8d5cd;
+  --ui-text-highlighted: #f6f4ee;
+  --ui-text-inverted: #121110;
+
+  --ui-primary: #f6f4ee;
+}
+
+body {
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Small uppercase label used above titles and for field names. */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
+}
+
+/* Large serif headline. */
+@utility display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--ui-text-highlighted);
+}
+
+/* Bottom-sheet animation for modals on phones. */
+@keyframes sheet-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes sheet-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* No grey flash when tapping on iOS/Android. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
