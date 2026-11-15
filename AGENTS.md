@@ -5,14 +5,20 @@
 Medusa 2 backend with Vue/Nuxt front ends instead of the official React admin and Next.js store.
 
 - `apps/backend` - Medusa server. React admin is disabled; do not add `src/admin` or React packages.
-  - Payment providers: `src/modules/paystack`, `src/modules/flutterwave` (shared helpers in `src/lib/payments.ts`). Registered in `medusa-config.ts` only when their secret keys are set. Unit tests use a mocked `fetch` (`npm run test:unit`). Webhooks must verify the signature, then re-verify the transaction with the provider's API.
+  - Uses the reusable packages below (payments, analytics, emails), wired up in `medusa-config.ts`. Payment and email providers are turned on only when their keys are set.
 - `apps/admin` - Nuxt 4 admin (SPA, `ssr: false`) with Nuxt UI. Calls the Admin API through `useMedusa()` (`@medusajs/js-sdk`, session auth). Pages need login unless `definePageMeta({ public: true })`.
   - Design: editorial (Instrument Serif headings, Inter body, warm neutrals, hairline rules). Reuse `app/components/app/*` (AppPageHeader, AppSection, AppField, AppStatus, AppEmpty, AppFormModal, AppConfirmModal) and `useConfirm()` / `useNotify()`. Edits open in modals via `useOverlay()`.
 - `apps/storefront` - Nuxt store (planned). Talks to the Medusa Store API.
   - Screens: orders, products, inventory, customers, settings (store, regions). List pages: table from `md`, simple list on phones; filters live in the URL.
   - Mobile first: base styles for phones, `sm:`/`md:`/`lg:` for larger screens. 44px touch targets and 16px field text on phones (see `app/app.config.ts`).
   - Extensions: Nuxt layers in `apps/admin/layers/<name>/` with an `admin.extension.ts` (widgets in zones, sidebar links). Example: `layers/notes`. Guide: `packages/admin-kit/README.md`.
-- `packages/admin-kit` - Nuxt module for the admin extension system: `defineAdminExtension`, `<AdminZone>`, `useAdminExtensions()`. Zones and their data types live in `src/runtime/define.ts`.
+- `packages/*` - reusable packages, meant to be installed in other projects too. Keep them self-contained: no imports from `apps/*`.
+  - `admin-kit` - Nuxt module for the admin extension system: `defineAdminExtension`, `<AdminZone>`, `useAdminExtensions()`, settings tabs. Zones and their data types live in `src/runtime/define.ts`.
+  - `paystack`, `flutterwave` - plain Node client (`.`) plus a Medusa payment provider (`./medusa`). The client must not import Medusa. Webhooks verify the signature, then re-verify the transaction with the provider's API. Tests: Jest with a mocked `fetch`.
+  - `medusa-analytics` - Medusa plugin (`GET /admin/analytics`) + Nuxt admin layer in `nuxt-admin/` (Home page).
+  - `medusa-resend` - Medusa plugin: Resend notification provider, order email subscribers, Vue email templates (`src/templates`, render functions, table layout, inline styles), admin API (`/admin/emails/*`) + Nuxt admin layer (Settings → Emails, order widget).
+  - Medusa plugins build with `node scripts/build.js` (backend only; `medusa plugin:build` would try to build React admin screens). Don't name route folders `test`/`__tests__`: Medusa skips them.
+  - Plugin admin layers use the host admin's auto-imports (AppSection, useMedusa...). Import admin-kit helpers explicitly in `admin.extension.ts`: `@nuxt-medusa/admin-kit/define`.
 
 ## Rules
 
@@ -34,5 +40,6 @@ npm run backend:migrate
 npm run dev
 npm run lint
 npm run typecheck          # admin
-cd apps/backend && npm run test:unit
+npm run packages:test      # package tests
+npm run packages:pack      # build .tgz files into dist-packages/
 ```

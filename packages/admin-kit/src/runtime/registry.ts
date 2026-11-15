@@ -1,5 +1,5 @@
 import { defineAsyncComponent, markRaw, type Component } from "vue"
-import type { AdminExtension, AdminNavItem, AdminZoneName } from "./define"
+import type { AdminExtension, AdminNavItem, AdminSettingsTab, AdminZoneName } from "./define"
 
 export interface RegisteredWidget {
   key: string
@@ -13,6 +13,7 @@ export interface AdminExtensionRegistry {
   extensions: AdminExtension[]
   widgetsFor: (zone: AdminZoneName) => RegisteredWidget[]
   nav: (AdminNavItem & { extensionId: string })[]
+  settings: (AdminSettingsTab & { extensionId: string })[]
 }
 
 export function createRegistry(extensions: AdminExtension[]): AdminExtensionRegistry {
@@ -60,9 +61,14 @@ export function createRegistry(extensions: AdminExtension[]): AdminExtensionRegi
     .flatMap(ext => (ext.nav ?? []).map(item => ({ ...item, extensionId: ext.id })))
     .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
 
+  const settings = valid
+    .flatMap(ext => (ext.settings ?? []).map(tab => ({ ...tab, extensionId: ext.id })))
+    .sort((a, b) => (a.order ?? 100) - (b.order ?? 100))
+
   return {
     extensions: valid,
     widgetsFor: zone => byZone.get(zone) ?? [],
     nav,
+    settings,
   }
 }

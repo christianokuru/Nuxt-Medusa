@@ -1,0 +1,49 @@
+{
+  "name": "@nuxt-medusa/medusa-analytics",
+  "version": "0.1.0",
+  "description": "Sales analytics for Medusa: a summary API and a home page for the Nuxt Medusa admin.",
+  "license": "MIT",
+  "keywords": [
+    "medusa",
+    "medusa-plugin",
+    "medusa-v2",
+    "analytics",
+    "nuxt"
+  ],
+  "files": [
+    ".medusa/server",
+    "nuxt-admin",
+    "README.md"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./nuxt-admin": "./nuxt-admin/nuxt.config.ts",
+    "./*": "./.medusa/server/src/*.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "typecheck": "tsc --noEmit",
+    "prepack": "node scripts/build.js"
+  },
+  "devDependencies": {
+    "@medusajs/cli": "2.22.7",
+    "@medusajs/framework": "2.22.7",
+    "@medusajs/medusa": "2.22.7",
+    "@swc/core": "^1.7.28",
+    "@types/node": "^20.12.11",
+    "typescript": "~5.9.3"
+  },
+  "peerDependencies": {
+    "@medusajs/framework": "^2.8.0",
+    "@medusajs/medusa": "^2.8.0",
+    "@nuxt-medusa/admin-kit": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependenciesMeta": {
+    "@nuxt-medusa/admin-kit": {
+      "optional": true
+    }
+  }
+}

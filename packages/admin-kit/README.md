@@ -40,8 +40,13 @@ export default defineAdminExtension({
     },
   ],
   nav: [
-    // Group can be an existing one ("Commerce", "Marketing") or a new one.
+    // Group can be an existing one ("Commerce", "Marketing"), a new one,
+    // or "" for the very top of the sidebar (no heading).
     { label: "Reviews", to: "/reviews", icon: "i-lucide-star", group: "Marketing" },
+  ],
+  settings: [
+    // A tab on the Settings page. Add the page as app/pages/settings/reviews.vue
+    { label: "Reviews", to: "/settings/reviews", icon: "i-lucide-star" },
   ],
 })
 ```
@@ -97,23 +102,39 @@ If a widget throws an error, only that widget is hidden. The rest of the page ke
 
 To add a zone: add it to `AdminZones` in `src/runtime/define.ts`, then place `<AdminZone name="..." :data="..." />` in the page.
 
-## Extensions as npm packages
+## Extensions inside a package
 
-An extension can also be published as a package (for example next to a Medusa backend plugin). Same layout. Add it to the admin's `nuxt.config.ts`:
+The best way to share an extension between projects is to ship it **inside the Medusa plugin it belongs to**, in a `nuxt-admin/` folder. Then one package holds both the backend and the admin part. See `packages/medusa-resend` and `packages/medusa-analytics`:
+
+```
+my-plugin/
+├── src/                     # Medusa plugin (API routes, subscribers...)
+└── nuxt-admin/
+    ├── package.json         # { "type": "module" }
+    ├── nuxt.config.ts       # export default defineNuxtConfig({})
+    ├── admin.extension.ts
+    └── app/...
+```
+
+In the plugin's `package.json`: `"exports": { "./nuxt-admin": "./nuxt-admin/nuxt.config.ts", ... }` and add `nuxt-admin` to `files`.
+
+The admin then uses it with:
 
 ```ts
 export default defineNuxtConfig({
-  extends: ["@acme/medusa-reviews-admin"],
+  extends: ["my-plugin/nuxt-admin"],
 })
 ```
 
-For packages, Nuxt does not auto-import inside `node_modules`, so import what you use:
+In `admin.extension.ts` of a package, import the helper instead of relying on auto-imports:
 
 ```ts
 import { defineAdminExtension } from "@nuxt-medusa/admin-kit/define"
 ```
 
-Icons are bundled at build time from the admin's own files and `layers/`. If a packaged extension uses other icons, list them in the admin's `icon.clientBundle.icons`.
+Inside `app/`, auto-imports work as usual, including the admin's own components and composables.
+
+Icons used in extension layers (including `admin.extension.ts`) are found and bundled automatically.
 
 ## Backend data
 

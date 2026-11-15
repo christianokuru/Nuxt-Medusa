@@ -6,6 +6,8 @@ export default defineNuxtConfig({
   // admin-kit: extension system (widgets in zones, sidebar links). Extensions live in
   // ./layers/<name>/ (picked up automatically) or in packages listed under `extends`.
   modules: ["@nuxt/ui", "@nuxt-medusa/admin-kit"],
+  // Admin parts of installed plugins (Nuxt layers shipped inside each plugin package).
+  extends: ["@nuxt-medusa/medusa-analytics/nuxt-admin", "@nuxt-medusa/medusa-resend/nuxt-admin"],
   css: ["~/assets/css/main.css"],
   devtools: { enabled: true },
   devServer: { port: 3001 },

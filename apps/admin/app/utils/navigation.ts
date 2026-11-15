@@ -2,12 +2,8 @@ import type { NavigationMenuItem } from "@nuxt/ui"
 
 // Sidebar links, grouped. Items without a page yet are disabled.
 // Extensions add their own links (see layouts/default.vue).
-// A group with an empty label shows its links without a heading.
+// The Home link comes from the analytics extension (@nuxt-medusa/medusa-analytics).
 export const navigationGroups: { label: string, items: NavigationMenuItem[] }[] = [
-  {
-    label: "",
-    items: [{ label: "Home", icon: "i-lucide-house", to: "/", exact: true }],
-  },
   {
     label: "Commerce",
     items: [

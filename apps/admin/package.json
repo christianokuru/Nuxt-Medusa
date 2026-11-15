@@ -21,9 +21,11 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.150",
     "@medusajs/js-sdk": "^2.22.7",
+    "@nuxt-medusa/admin-kit": "*",
+    "@nuxt-medusa/medusa-analytics": "*",
+    "@nuxt-medusa/medusa-resend": "*",
     "@nuxt/ui": "^4.12.0",
     "nuxt": "^4.6.4",
-    "tailwindcss": "^4.3.5",
-    "@nuxt-medusa/admin-kit": "0.0.1"
+    "tailwindcss": "^4.3.5"
   }
 }

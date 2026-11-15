@@ -1,0 +1,68 @@
+{
+  "name": "@nuxt-medusa/flutterwave",
+  "version": "0.1.0",
+  "description": "Flutterwave payments for Node.js, with a ready-made Medusa payment provider.",
+  "license": "MIT",
+  "keywords": [
+    "flutterwave",
+    "payments",
+    "medusa",
+    "medusa-plugin",
+    "nigeria",
+    "africa"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./medusa": {
+      "types": "./dist/medusa/index.d.ts",
+      "default": "./dist/medusa/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "@medusajs/framework": "^2.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@medusajs/framework": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@medusajs/framework": "2.22.7",
+    "@swc/core": "^1.7.28",
+    "@swc/jest": "^0.2.36",
+    "@types/jest": "^29.5.13",
+    "@types/node": "^20.12.11",
+    "jest": "^29.7.0",
+    "typescript": "~5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": [
+        "@swc/jest"
+      ]
+    },
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.ts"
+    ]
+  }
+}

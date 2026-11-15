@@ -18,7 +18,11 @@
     "backend:seed": "npm run seed --workspace=@nuxt-medusa/backend",
     "backend:user": "npm exec --workspace=@nuxt-medusa/backend -- medusa user",
     "admin:dev": "turbo dev --filter=@nuxt-medusa/admin",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "postinstall": "turbo run build --filter=./packages/*",
+    "packages:build": "turbo run build --filter=./packages/*",
+    "packages:test": "turbo run test --filter=./packages/*",
+    "packages:pack": "npm run packages:build && mkdir -p dist-packages && npm pack --workspace=packages --pack-destination dist-packages"
   },
   "devDependencies": {
     "@medusajs/eslint-plugin": "2.22.7",

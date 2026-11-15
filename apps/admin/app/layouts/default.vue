@@ -41,11 +41,17 @@ const groups = computed(() => {
     let group = result.find(g => g.label === label)
     if (!group) {
       group = { label, items: [] }
-      result.push(group)
+      // An empty group name means "top of the sidebar, no heading".
+      if (label === "") {
+        result.unshift(group)
+      }
+      else {
+        result.push(group)
+      }
     }
-    group.items.push({ label: item.label, icon: item.icon ?? "i-lucide-puzzle", to: item.to })
+    group.items.push({ label: item.label, icon: item.icon ?? "i-lucide-puzzle", to: item.to, exact: item.to === "/" })
   }
-  return result
+  return result.filter(g => g.items.length)
 })
 
 const navUi = {

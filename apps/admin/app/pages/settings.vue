@@ -2,10 +2,13 @@
 // Settings shell: header and tabs. Each tab is a child page.
 const route = useRoute()
 
+// Built-in tabs plus tabs added by extensions (admin.extension.ts → settings).
+const extensions = useAdminExtensions()
 const tabs = [
-  { label: "Store", to: "/settings/store", icon: "i-lucide-store" },
-  { label: "Regions", to: "/settings/regions", icon: "i-lucide-globe" },
-]
+  { label: "Store", to: "/settings/store", icon: "i-lucide-store", order: 10 },
+  { label: "Regions", to: "/settings/regions", icon: "i-lucide-globe", order: 20 },
+  ...extensions.settings.map(tab => ({ ...tab, icon: tab.icon ?? "i-lucide-puzzle", order: tab.order ?? 100 })),
+].sort((a, b) => a.order - b.order)
 </script>
 
 <template>
@@ -20,7 +23,7 @@ const tabs = [
 
     <template #body>
       <div class="w-full max-w-5xl mx-auto px-5 sm:px-10 pt-2 pb-10 sm:py-14">
-        <AppPageHeader eyebrow="Settings" title="Your store" description="How your store sells: currencies, regions and payments." />
+        <AppPageHeader eyebrow="Settings" title="Your store" description="How your store runs: currencies, regions, payments and more." />
 
         <nav class="flex gap-1 -mx-5 px-5 sm:mx-0 sm:px-0 border-b border-default overflow-x-auto [scrollbar-width:none]" aria-label="Settings sections">
           <NuxtLink

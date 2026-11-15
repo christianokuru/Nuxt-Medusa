@@ -69,6 +69,14 @@ export default defineNuxtModule({
     ])
     addComponent({ name: "AdminZone", filePath: resolver.resolve("./runtime/components/AdminZone.vue") })
 
+    // Sidebar and settings icons are declared in admin.extension.ts, which Nuxt Icon's
+    // scanner doesn't look at by default. Add it so those icons get bundled too.
+    const icon = (nuxt.options as { icon?: { clientBundle?: { scan?: boolean | { globInclude?: string[] } } } }).icon
+    const scan = icon?.clientBundle?.scan
+    if (scan && typeof scan === "object" && Array.isArray(scan.globInclude)) {
+      scan.globInclude.push("admin.extension.{ts,js,mjs}", "layers/*/admin.extension.{ts,js,mjs}")
+    }
+
     // The runtime is TypeScript source; let Nuxt compile it.
     nuxt.options.build.transpile.push(resolver.resolve("./runtime"))
 

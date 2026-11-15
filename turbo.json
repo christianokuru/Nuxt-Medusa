@@ -14,7 +14,10 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "dependsOn": [
+        "^build"
+      ]
     },
     "start": {
       "dependsOn": [
@@ -25,7 +28,10 @@
       "outputs": []
     },
     "test": {
-      "outputs": []
+      "outputs": [],
+      "dependsOn": [
+        "^build"
+      ]
     },
     "seed": {
       "outputs": []

@@ -1,7 +1,6 @@
 {
   "name": "@nuxt-medusa/admin-kit",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.1.0",
   "type": "module",
   "description": "Extension system for the Nuxt Medusa admin: widgets in page zones and sidebar links.",
   "license": "MIT",
@@ -15,5 +14,16 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.6.4"
-  }
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "nuxt",
+    "nuxt-module",
+    "medusa",
+    "admin",
+    "extensions"
+  ]
 }

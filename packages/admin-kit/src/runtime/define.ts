@@ -82,9 +82,22 @@ export interface AdminNavItem {
   to: string
   /** Lucide icon, e.g. "i-lucide-star". */
   icon?: string
-  /** Sidebar group. An existing group ("Commerce", "Marketing") or a new one. Default "Extensions". */
+  /**
+   * Sidebar group. An existing group ("Commerce", "Marketing") or a new one. Default "Extensions".
+   * Use "" to put the link at the very top of the sidebar, without a heading.
+   */
   group?: string
   /** Lower numbers show first within the group. Default 100. */
+  order?: number
+}
+
+export interface AdminSettingsTab {
+  label: string
+  /** Page path under /settings, e.g. "/settings/emails". Add it as `app/pages/settings/emails.vue`. */
+  to: string
+  /** Lucide icon, e.g. "i-lucide-mail". */
+  icon?: string
+  /** Lower numbers show first. Built-in tabs use 10 and 20. Default 100. */
   order?: number
 }
 
@@ -95,6 +108,8 @@ export interface AdminExtension {
   name?: string
   widgets?: AdminWidget[]
   nav?: AdminNavItem[]
+  /** Extra tabs on the Settings page. */
+  settings?: AdminSettingsTab[]
 }
 
 /** Describe an extension. Put this in `admin.extension.ts` at the root of a Nuxt layer. */
