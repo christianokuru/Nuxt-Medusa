@@ -83,6 +83,8 @@ If a widget throws an error, only that widget is hidden. The rest of the page ke
 
 | Zone | Where | `data` |
 | --- | --- | --- |
+| `dashboard.before` | Home page, under the greeting | `{ range, refresh }` (range: `today`, `7d`, `30d`, `90d`) |
+| `dashboard.after` | Home page, at the bottom | `{ range, refresh }` |
 | `product.list.before` | Products list, under the header | `{}` |
 | `product.list.after` | Products list, at the bottom | `{}` |
 | `product.details.before` | Product page, above the main details | `{ product, refresh }` |

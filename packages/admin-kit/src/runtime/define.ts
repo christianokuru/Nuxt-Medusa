@@ -8,6 +8,8 @@ import type { HttpTypes } from "@medusajs/types"
  * To add a zone: add it here, then place `<AdminZone name="..." :data="..." />` in a page.
  */
 export interface AdminZones {
+  "dashboard.before": AdminDashboardZoneData
+  "dashboard.after": AdminDashboardZoneData
   "product.list.before": Record<string, never>
   "product.list.after": Record<string, never>
   "product.details.before": AdminProductZoneData
@@ -17,6 +19,13 @@ export interface AdminZones {
   "order.details.after": AdminOrderZoneData
   "customer.details.before": AdminCustomerZoneData
   "customer.details.after": AdminCustomerZoneData
+}
+
+export interface AdminDashboardZoneData {
+  /** The time period picked on the home page. */
+  range: "today" | "7d" | "30d" | "90d"
+  /** Reload the home page figures. */
+  refresh: () => Promise<void>
 }
 
 export interface AdminOrderZoneData {
@@ -40,6 +49,8 @@ export interface AdminProductZoneData {
 export type AdminZoneName = keyof AdminZones
 
 export const adminZoneNames = [
+  "dashboard.before",
+  "dashboard.after",
   "product.list.before",
   "product.list.after",
   "product.details.before",

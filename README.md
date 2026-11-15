@@ -44,7 +44,9 @@ npm run dev
 - Backend: http://localhost:9000 (check http://localhost:9000/health)
 - Admin: http://localhost:3001 (log in with the user from step 5)
 
-Admin screens: Orders, Products, Inventory, Customers, Settings (store, currencies, regions and payments).
+Admin screens: Home (sales summary), Orders, Products, Inventory, Customers, Settings (store, currencies, regions and payments).
+
+The Home page shows sales, orders, average order and new customers for today, 7, 30 or 90 days (compared with the period before), a sales chart, best sellers, the latest orders, and what needs attention (payments to collect, orders to pack or ship, low stock). Its numbers come from `GET /admin/dashboard` in `apps/backend/src/api/admin/dashboard/route.ts`.
 
 Optional: add demo products with `npm run backend:seed`.
 

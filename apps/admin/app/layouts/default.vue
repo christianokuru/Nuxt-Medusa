@@ -77,7 +77,7 @@ const navUi = {
 
       <template #default="{ collapsed }">
         <div v-for="group in groups" :key="group.label">
-          <p v-if="!collapsed" class="eyebrow px-2.5 mb-2">
+          <p v-if="!collapsed && group.label" class="eyebrow px-2.5 mb-2">
             {{ group.label }}
           </p>
           <UNavigationMenu
