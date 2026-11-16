@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Flutterwave payments for Node.js, with a ready-made Medusa payment provider.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianokuru/Nuxt-Medusa.git",
+    "directory": "packages/flutterwave"
+  },
+  "homepage": "https://github.com/christianokuru/Nuxt-Medusa/tree/main/packages/flutterwave#readme",
+  "bugs": {
+    "url": "https://github.com/christianokuru/Nuxt-Medusa/issues"
+  },
   "keywords": [
     "flutterwave",
     "payments",
@@ -64,5 +73,8 @@
     "testMatch": [
       "**/__tests__/**/*.test.ts"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

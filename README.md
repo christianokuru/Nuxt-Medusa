@@ -146,6 +146,7 @@ The store name in emails is the one set in **Settings → Store**.
 | `npm run packages:build` | Build the packages (runs on `npm install` too) |
 | `npm run packages:test` | Test the packages |
 | `npm run packages:pack` | Make installable `.tgz` files in `dist-packages/` |
+| `npm run packages:publish` | Publish new package versions to npm (`-- --dry-run` to check first) |
 
 ## Admin extensions
 
@@ -153,36 +154,35 @@ Add widgets to admin pages, pages to the sidebar and tabs to Settings without to
 
 ## Using the packages in other projects
 
-Each package has its own README with setup steps. The payment packages also work in projects without Medusa (any Node.js server, including Nuxt server routes).
+The packages are published on npm under `@nuxt-medusa`. Each one has its own README with setup steps. The payment packages also work in projects without Medusa (any Node.js server, including Nuxt server routes).
+
+```bash
+npm install @nuxt-medusa/paystack
+```
 
 A new store's admin is two small files: install `nuxt` and `@nuxt-medusa/admin`, then `extends: ["@nuxt-medusa/admin"]` in `nuxt.config.ts`. See `packages/admin/README.md`.
 
-npm can't install one folder of a GitHub repo directly, so pick one of these:
+### Publishing to npm
 
-**1. npm (simplest to install).** Publish once per version:
+One-time setup:
 
-```bash
-npm login
-npm publish --workspace=packages/paystack --access public   # repeat for each package
-```
+1. Create a free account on [npmjs.com](https://www.npmjs.com) and turn on two-factor login.
+2. Create a free organisation named `nuxt-medusa` (Profile → Add Organization). It owns the `@nuxt-medusa/...` names.
+3. On your computer: `npm login`
 
-The `@nuxt-medusa` scope must belong to you on npmjs.com (create a free organisation with that name, or rename the packages to your own scope). Then anywhere: `npm install @nuxt-medusa/paystack`.
+Each release:
 
-**2. GitHub releases (no npm account).**
+1. Raise the version of each package you changed, e.g. `npm version patch --workspace=packages/admin --no-git-tag-version`.
+   - `patch` (0.1.0 → 0.1.1): fixes
+   - `minor` (0.1.0 → 0.2.0): new features
+   - `major` (0.1.0 → 1.0.0): changes that need the other projects to change their code
+2. Check what would go up: `npm run packages:publish -- --dry-run`
+3. Publish: `npm run packages:publish`. It runs the tests, then publishes only the packages whose new version isn't on npm yet.
+4. Commit the version changes.
 
-```bash
-npm run packages:pack        # creates dist-packages/*.tgz
-```
+In other projects, `npm update` then fetches the new versions.
 
-Attach the `.tgz` files to a GitHub release. Other projects install from the file's link:
-
-```bash
-npm install https://github.com/<owner>/<repo>/releases/download/v0.1.0/nuxt-medusa-paystack-0.1.0.tgz
-```
-
-This works when the repository is public. For a private repository, use option 1 with private packages, or copy the `.tgz` files into the other project and install them from there (`npm install ./vendor/nuxt-medusa-paystack-0.1.0.tgz`).
-
-**3. While developing on the same computer:** `npm install /path/to/Nuxt-Medusa/packages/paystack`.
+npm packages are public: anyone can see and install them. Never put keys or passwords in a package.
 
 ## License
 

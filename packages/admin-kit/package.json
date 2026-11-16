@@ -4,6 +4,15 @@
   "type": "module",
   "description": "Extension system for the Nuxt Medusa admin: widgets in page zones and sidebar links.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianokuru/Nuxt-Medusa.git",
+    "directory": "packages/admin-kit"
+  },
+  "homepage": "https://github.com/christianokuru/Nuxt-Medusa/tree/main/packages/admin-kit#readme",
+  "bugs": {
+    "url": "https://github.com/christianokuru/Nuxt-Medusa/issues"
+  },
   "exports": {
     ".": "./src/module.ts",
     "./define": "./src/runtime/define.ts"
@@ -25,5 +34,8 @@
     "medusa",
     "admin",
     "extensions"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
