@@ -22,7 +22,8 @@
     "postinstall": "turbo run build --filter=./packages/*",
     "packages:build": "turbo run build --filter=./packages/*",
     "packages:test": "turbo run test --filter=./packages/*",
-    "packages:pack": "npm run packages:build && mkdir -p dist-packages && npm pack --workspace=packages --pack-destination dist-packages"
+    "packages:pack": "npm run packages:build && mkdir -p dist-packages && npm pack --workspace=packages --pack-destination dist-packages",
+    "packages:publish": "npm run packages:test && node scripts/publish-packages.mjs"
   },
   "devDependencies": {
     "@medusajs/eslint-plugin": "2.22.7",

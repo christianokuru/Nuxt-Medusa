@@ -44,4 +44,5 @@ npm run lint
 npm run typecheck          # admin
 npm run packages:test      # package tests
 npm run packages:pack      # build .tgz files into dist-packages/
+npm run packages:publish   # publish new package versions to npm (-- --dry-run)
 ```

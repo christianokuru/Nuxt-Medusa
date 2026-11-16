@@ -4,6 +4,15 @@
   "type": "module",
   "description": "Vue/Nuxt admin dashboard for Medusa, as a Nuxt layer.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianokuru/Nuxt-Medusa.git",
+    "directory": "packages/admin"
+  },
+  "homepage": "https://github.com/christianokuru/Nuxt-Medusa/tree/main/packages/admin#readme",
+  "bugs": {
+    "url": "https://github.com/christianokuru/Nuxt-Medusa/issues"
+  },
   "main": "./nuxt.config.ts",
   "exports": {
     ".": "./nuxt.config.ts",
@@ -31,5 +40,8 @@
     "medusa",
     "admin",
     "ecommerce"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

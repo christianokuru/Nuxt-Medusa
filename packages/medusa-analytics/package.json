@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "description": "Sales analytics for Medusa: a summary API and a home page for the Nuxt Medusa admin.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianokuru/Nuxt-Medusa.git",
+    "directory": "packages/medusa-analytics"
+  },
+  "homepage": "https://github.com/christianokuru/Nuxt-Medusa/tree/main/packages/medusa-analytics#readme",
+  "bugs": {
+    "url": "https://github.com/christianokuru/Nuxt-Medusa/issues"
+  },
   "keywords": [
     "medusa",
     "medusa-plugin",
@@ -45,5 +54,8 @@
     "@nuxt-medusa/admin-kit": {
       "optional": true
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
