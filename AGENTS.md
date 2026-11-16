@@ -6,11 +6,13 @@ Medusa 2 backend with Vue/Nuxt front ends instead of the official React admin an
 
 - `apps/backend` - Medusa server. React admin is disabled; do not add `src/admin` or React packages.
   - Uses the reusable packages below (payments, analytics, emails), wired up in `medusa-config.ts`. Payment and email providers are turned on only when their keys are set.
-- `apps/admin` - Nuxt 4 admin (SPA, `ssr: false`) with Nuxt UI. Calls the Admin API through `useMedusa()` (`@medusajs/js-sdk`, session auth). Pages need login unless `definePageMeta({ public: true })`.
+- `apps/admin` - this store's admin app: only `nuxt.config.ts` (extends `@nuxt-medusa/admin` + plugin admin layers), `layers/` (local extensions, e.g. `layers/notes`) and `.env`. Admin screens live in `packages/admin`.
+- `packages/admin` - the admin itself, a Nuxt layer: Nuxt 4 admin (SPA, `ssr: false`) with Nuxt UI. Calls the Admin API through `useMedusa()` (`@medusajs/js-sdk`, session auth). Pages need login unless `definePageMeta({ public: true })`.
   - Design: editorial (Instrument Serif headings, Inter body, warm neutrals, hairline rules). Reuse `app/components/app/*` (AppPageHeader, AppSection, AppField, AppStatus, AppEmpty, AppFormModal, AppConfirmModal) and `useConfirm()` / `useNotify()`. Edits open in modals via `useOverlay()`.
 - `apps/storefront` - Nuxt store (planned). Talks to the Medusa Store API.
   - Screens: orders, products, inventory, customers, settings (store, regions). List pages: table from `md`, simple list on phones; filters live in the URL.
   - Mobile first: base styles for phones, `sm:`/`md:`/`lg:` for larger screens. 44px touch targets and 16px field text on phones (see `app/app.config.ts`).
+  - It is a layer: no `~/` imports (they point into the app using it; use relative imports), and paths in its `nuxt.config.ts` must be absolute.
   - Extensions: Nuxt layers in `apps/admin/layers/<name>/` with an `admin.extension.ts` (widgets in zones, sidebar links). Example: `layers/notes`. Guide: `packages/admin-kit/README.md`.
 - `packages/*` - reusable packages, meant to be installed in other projects too. Keep them self-contained: no imports from `apps/*`.
   - `admin-kit` - Nuxt module for the admin extension system: `defineAdminExtension`, `<AdminZone>`, `useAdminExtensions()`, settings tabs. Zones and their data types live in `src/runtime/define.ts`.
