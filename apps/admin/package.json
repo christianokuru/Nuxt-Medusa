@@ -1,9 +1,9 @@
 {
-  "name": "@nuxt-medusa/admin",
+  "name": "@nuxt-medusa/admin-app",
   "version": "0.0.1",
   "private": true,
   "type": "module",
-  "description": "Vue/Nuxt admin dashboard for Medusa.",
+  "description": "The admin dashboard for this store, built from @nuxt-medusa/admin and plugin add-ons.",
   "license": "MIT",
   "scripts": {
     "dev": "nuxt dev --port 3001",
@@ -19,13 +19,10 @@
     "vue-tsc": "^3.3.14"
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.150",
-    "@medusajs/js-sdk": "^2.22.7",
+    "@nuxt-medusa/admin": "*",
     "@nuxt-medusa/admin-kit": "*",
     "@nuxt-medusa/medusa-analytics": "*",
     "@nuxt-medusa/medusa-resend": "*",
-    "@nuxt/ui": "^4.12.0",
-    "nuxt": "^4.6.4",
-    "tailwindcss": "^4.3.5"
+    "nuxt": "^4.6.4"
   }
 }

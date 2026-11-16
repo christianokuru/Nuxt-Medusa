@@ -1,5 +1,5 @@
 import type { HttpTypes } from "@medusajs/types"
-import type { DotTone } from "~/components/app/Dot.vue"
+import type { DotTone } from "../components/app/Dot.vue"
 
 type StatusInfo = { label: string, tone: DotTone }
 

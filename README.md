@@ -7,9 +7,10 @@ A [Medusa](https://medusajs.com) commerce backend with a Vue/Nuxt admin and stor
 ```
 apps/
   backend/            Medusa 2 server (React admin turned off)
-  admin/              Nuxt admin dashboard (Vue)
+  admin/              This store's admin: the admin package + add-ons
   storefront/         Nuxt store                          (coming later)
 packages/             Reusable: install them in other projects too
+  admin/              The Nuxt admin dashboard (Vue), as an installable Nuxt layer
   paystack/           Paystack payments (any Node.js app + Medusa provider)
   flutterwave/        Flutterwave payments (any Node.js app + Medusa provider)
   medusa-analytics/   Sales summary API + admin Home page
@@ -73,7 +74,7 @@ Optional: add demo products with `npm run backend:seed`.
 | --- | --- |
 | `NUXT_PUBLIC_MEDUSA_BACKEND_URL` | Where the backend runs. Default `http://localhost:9000`. |
 
-The admin is a static site. Build it with `npm run generate --workspace=@nuxt-medusa/admin` and upload `apps/admin/.output/public` to any static host. Add the admin's address to `ADMIN_CORS` and `AUTH_CORS` in the backend settings.
+The admin is a static site. Build it with `npm run generate --workspace=@nuxt-medusa/admin-app` and upload `apps/admin/.output/public` to any static host. Add the admin's address to `ADMIN_CORS` and `AUTH_CORS` in the backend settings.
 
 ## Payments: Paystack and Flutterwave
 
@@ -153,6 +154,8 @@ Add widgets to admin pages, pages to the sidebar and tabs to Settings without to
 ## Using the packages in other projects
 
 Each package has its own README with setup steps. The payment packages also work in projects without Medusa (any Node.js server, including Nuxt server routes).
+
+A new store's admin is two small files: install `nuxt` and `@nuxt-medusa/admin`, then `extends: ["@nuxt-medusa/admin"]` in `nuxt.config.ts`. See `packages/admin/README.md`.
 
 npm can't install one folder of a GitHub repo directly, so pick one of these:
 
