@@ -178,6 +178,7 @@ Each release:
    - `major` (0.1.0 → 1.0.0): changes that need the other projects to change their code
 2. Check what would go up: `npm run packages:publish -- --dry-run`
 3. Publish: `npm run packages:publish`. It runs the tests, then publishes only the packages whose new version isn't on npm yet.
+   - npm may hold a new version for checking or for your approval before anyone can install it ("staged"). If it says a version is waiting, approve it on npmjs.com in the package's **Staged Packages** tab, or run `npm stage list` and `npm stage approve <id>`.
 4. Commit the version changes.
 
 In other projects, `npm update` then fetches the new versions.
